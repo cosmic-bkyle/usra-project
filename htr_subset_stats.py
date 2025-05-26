@@ -1,5 +1,6 @@
 import random
 import subprocess
+import pandas
 
 corner_cases = {
     "0c0": "",
@@ -39,7 +40,7 @@ def get_subset_to_optimal_dict():
     subset_dict = {}
     for cc in corner_cases:
         for ec in edge_cases:
-            for i in range(5):
+            for i in range(1):
                 dr = get_dr_in_subset(cc, ec)
                 optimal_length = dr.count(" ") + 1 #number of spaces + 1
                 subset_dict.setdefault(cc + " " +ec, []).append(optimal_length)
@@ -55,3 +56,7 @@ def get_corner_optimal_to_optimal_dict():
 #def get_random_dr():
 if __name__ == "__main__":
     print(get_subset_to_optimal_dict())
+    # TODO: refactor this so that nissy is called literally only once! 
+    # Start out by just filling a panda dataframe for one subset. Learn how to put this dataframe into a nice looking csv / excel.
+    # For the optimal corner solution -> optimal stats, generate a lot of random drs using nissy scramble dr. generate (co, o) pair for each. Sort by co. Take the means of o. graph this.
+    # 
