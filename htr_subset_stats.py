@@ -1,9 +1,11 @@
 import sys
 import random
 import subprocess
-import pandas
+import pandas as pd
 import time
 import re
+
+NUM_SCRAMBLES = 10
 
 corner_cases = {
     "0c0": "",
@@ -54,15 +56,19 @@ def get_corner_optimal_to_optimal_dict():
     corner_opt_dict = {}
     dr = get_dr_in_subset
 
-def gen_soln_table(scrambles, p):
+def get_solns(scrambles):
     '''Generates a table (return type to be decided) of solutions and their lengths to the provided scrambles '''
 
+    #open a subprocess
+    p = subprocess.Popen("nissy", shell = True, cwd = "/Users/user/Desktop/nissy-2.0.7",stdout=subprocess.PIPE,stdin=subprocess.PIPE)
+    
     #format the scramble list into a string to pass to stdin for nissy
     mylist = []
     for scramble in scrambles:
         mylist.append("\n" + scramble)
     to_input = "solve drfin -i -t 20" + ' '.join(mylist)
-    nissy_output = p.communicate(input=bytes(to_input,'utf-8'))[0].decode()
+    nissy_output, _ = p.communicate(input=bytes(to_input,'utf-8'))
+    nissy_output = nissy_output.decode()
 
     ''' At this point, output appears as:
 
@@ -84,10 +90,10 @@ def gen_soln_table(scrambles, p):
     for i in nissy_output:
         soln = i.split('\n')[1]
         soln = re.split(r'\(|\)',soln)
-        solns.append(soln[0])
+        #solns.append(soln[0])
         lengths.append(int(soln[1]))
-    print(solns)
-    print(lengths)
+    #return solns, lengths
+    return lengths
 
 
 
@@ -125,34 +131,32 @@ def half_turns(k):
         scramble.append(move)
         n = n+1
     return scramble
-            
-#def get_random_dr():
+
+def main():
+    rows = []
+    time_start = time.time()
+    for c in corner_cases:
+        for e in edge_cases:
+            subset_scrambles = gen_subset_scrambles(c, e, NUM_SCRAMBLES)
+            lengths_list = get_solns(subset_scrambles)
+            ser = pd.Series(lengths_list) #array
+            average_len = ser.mean().round(3)
+            distribution = (ser.value_counts(normalize=True)
+                           .sort_index(ascending=False)
+                           .mul(100).round(2)
+                           .astype(str) + '%')
+            distribution_string  = ";  ".join(f"{len}: {percent}" for len, percent in distribution.items())
+
+            rows.append({
+                "corner case": c,
+                "edge case"  : e,
+                "solution mean"   : average_len,
+                "distribution": distribution_string
+            })
+            print("Done with "+ c + " " + e + ". mean: " + str(average_len))
+    df = pd.DataFrame(rows)
+    df.to_csv("ben_subset_stats.csv", index=False)
+    print("Total time: " + str(time.time() - time_start))
+
 if __name__ == "__main__":
-    p = subprocess.Popen("nissy", shell = True, cwd = "/Users/user/Desktop/nissy-2.0.7",stdout=subprocess.PIPE,stdin=subprocess.PIPE)
-    time.sleep(1)
-    start = time.time()
-    
-    _2c3_2e = gen_subset_scrambles("2c3", "2e", 1000)
-    my_table = gen_soln_table(_2c3_2e, p)
-    print(time.time() - start)
-
-
-
-
-
-
-
-
-    #the below is unnecessary if I use p.communicate.
-    p.terminate()
-    time.sleep(1)
-    if p.poll() is None:
-        print("nissy is still running!")
-    else:
-        print(f"nissy has exited with code {p.poll()}")
-
-    
-    # TODO: refactor this so that nissy is called literally only once! 
-    # Start out by just filling a panda dataframe for one subset. Learn how to put this dataframe into a nice looking csv / excel.
-    # For the optimal corner solution -> optimal stats, generate a lot of random drs using nissy scramble dr. generate (co, o) pair for each. Sort by co. Take the means of o. graph this.
-    # 
+    main()
