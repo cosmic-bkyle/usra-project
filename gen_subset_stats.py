@@ -6,7 +6,7 @@ import pandas as pd
 import time
 import re
 
-NUM_SCRAMBLES = 1000
+NUM_SCRAMBLES = 100
 
 corner_cases = {
     "0c0": "",
@@ -88,7 +88,7 @@ def main():
                 "solution mean"   : average_len,
                 "distribution": distribution_string
             })
-            
+
             print("Done with "+ c + " " + e + ". mean: " + str(average_len))
     df = pd.DataFrame(rows)
     df.to_csv("subset_stats_ben.csv", index=False)

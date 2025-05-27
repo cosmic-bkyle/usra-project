@@ -6,9 +6,15 @@ import time
 import re
 
 def get_dr_scrambles(n):
-    #nissy scramble dr -n n 
 
-    return None
+    scrambles = subprocess.check_output(
+        ["nissy", "scramble", "dr", "-n", str(n)],
+        text=True                    # auto‑decode UTF‑8
+        ).strip().splitlines()
+    
+    return scrambles
+
+
 def half_turns(k):
     '''generates a sequence of non-redundant halfturns of length k or k+1 (for parity reasons)'''
 
@@ -44,7 +50,7 @@ def get_corner_solns(scrambles):
     mylist = []
     for scramble in scrambles:
         mylist.append("\n" + scramble)
-    to_input = "solve corners -i -t 20" + ' '.join(mylist)
+    to_input = "solve corners -i -t 20\n" + "\n".join(scrambles) + "\n"
     nissy_output, _ = p.communicate(input=bytes(to_input,'utf-8'))
     nissy_output = nissy_output.decode()
 
@@ -71,6 +77,7 @@ def get_corner_solns(scrambles):
         #solns.append(soln[0])
         lengths.append(int(soln[1]))
     #return solns, lengths
+    time.sleep(0.5)
     return lengths
 def get_solns(scrambles):
     '''Generates a list of optimal solution lengths to the scrambles.'''
@@ -109,4 +116,5 @@ def get_solns(scrambles):
         #solns.append(soln[0])
         lengths.append(int(soln[1]))
     #return solns, lengths
+    time.sleep(0.5)
     return lengths
