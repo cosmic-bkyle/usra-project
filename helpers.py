@@ -117,4 +117,4 @@ def get_solns(scrambles):
         lengths.append(int(soln[1]))
     #return solns, lengths
     time.sleep(0.5)
-    return lengths
+    return lengths 
