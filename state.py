@@ -3,14 +3,14 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Iterable
 import itertools
 
-# Corner position indices 
+# Corner position indices:
 # 0: URF, 1: UFL, 2: ULB, 3: UBR, 4: DFR, 5: DLF, 6: DBL, 7: DRB
-N_CORNERS = 8
-#edge position indices#
+NUM_CORNERS = 8
+#edge position indices:
 # 0: UR, 1: UF, 2: UL, 3: UB, 4: DR, 5: DF, 6: DL, 7: DB, 8: FR, 9: FL, 10: BL, 11: BR
-N_EDGES = 12
+NUM_EDGES = 12
 
-MOVE_CORNERS: Dict[str, tuple[tuple[int, ...], tuple[int, ...]]] = {
+MOVE_CORNERS = {
     "U":  ((3, 0, 1, 2, 4, 5, 6, 7), (0, 0, 0, 0, 0, 0, 0, 0)),
     "U2": ((2, 3, 0, 1, 4, 5, 6, 7), (0, 0, 0, 0, 0, 0, 0, 0)),
     "U'": ((1, 2, 3, 0, 4, 5, 6, 7), (0, 0, 0, 0, 0, 0, 0, 0)),
@@ -36,7 +36,7 @@ MOVE_CORNERS: Dict[str, tuple[tuple[int, ...], tuple[int, ...]]] = {
     "B'": ((0, 1, 6, 2, 4, 5, 7, 3), (0, 0, 2, 1, 0, 0, 1, 2)),
 }
 
-MOVE_EDGES: Dict[str, tuple[tuple[int, ...], tuple[int, ...]]] = {
+MOVE_EDGES = {
     "U":  ((3, 0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11), (0,)*12),
     "U2": ((2, 3, 0, 1, 4, 5, 6, 7, 8, 9, 10, 11), (0,)*12),
     "U'": ((1, 2, 3, 0, 4, 5, 6, 7, 8, 9, 10, 11), (0,)*12),
@@ -53,8 +53,8 @@ MOVE_EDGES: Dict[str, tuple[tuple[int, ...], tuple[int, ...]]] = {
     "L2": ((0, 1, 9, 3, 4, 5, 10, 7, 8, 2, 6, 11), (0,)*12),
     "L'": ((0, 1, 6, 3, 4, 5, 9, 7, 8, 10, 2, 11), (0,)*12),
 
-    "F":  ((0, 9, 2, 11, 4, 8, 6, 5, 1, 5, 10, 3),  # orientation flips on F\,B
-            (0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1)),
+    "F":  ((0, 5, 2, 3, 1, 9, 6, 7, 8, 5, 10, 3),  # orientation flips on F\,B
+            (0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1)), #need to change this.
     "F2": ((0, 8, 2, 5, 4, 1, 6, 9, 5, 4, 10, 11), (0,)*12),
     "F'": ((0, 4, 2, 9, 4, 1, 6, 11, 5, 8, 10, 3),
             (0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1)),
