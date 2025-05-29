@@ -10,6 +10,7 @@ NUM_CORNERS = 8
 # 0: UR, 1: UF, 2: UL, 3: UB, 4: DR, 5: DF, 6: DL, 7: DB, 8: FR, 9: FL, 10: BL, 11: BR
 NUM_EDGES = 12
 
+
 MOVE_CORNERS = {
     "U":  ((3, 0, 1, 2, 4, 5, 6, 7), (0, 0, 0, 0, 0, 0, 0, 0)),
     "U2": ((2, 3, 0, 1, 4, 5, 6, 7), (0, 0, 0, 0, 0, 0, 0, 0)),
@@ -35,7 +36,8 @@ MOVE_CORNERS = {
     "B2": ((0, 1, 7, 6, 4, 5, 3, 2), (0, 0, 0, 0, 0, 0, 0, 0)),
     "B'": ((0, 1, 6, 2, 4, 5, 7, 3), (0, 0, 2, 1, 0, 0, 1, 2)),
 }
-
+MYMOVE = MOVE_CORNERS["R"]
+        
 MOVE_EDGES = {
     "U":  ((3, 0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11), (0,)*12),
     "U2": ((2, 3, 0, 1, 4, 5, 6, 7, 8, 9, 10, 11), (0,)*12),
@@ -66,3 +68,43 @@ MOVE_EDGES = {
             (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1)),
 }
   
+def inverse_corner(move):
+    ''' Inverts the corner permutation represented by the tuple. 
+    "U":  ((3, 0, 1, 2, 4, 5, 6, 7), (0, 0, 0, 0, 0, 0, 0, 0)),
+    
+    '''
+    perm = move[0]
+    ori = move[1]
+    new_perm = ( 
+        perm.index(0), perm.index(1), perm.index(2), perm.index(3), perm.index(4), perm.index(5), perm.index(6), perm.index(7)
+    )
+    my_list = []
+    for element in ori:
+        if element == 0:
+            my_list.append(0)
+        elif element == 1:
+            my_list.append(2)
+        elif element == 2:
+            my_list.append(1)
+    new_ori = tuple(my_list)
+    return (new_perm, new_ori)
+
+
+
+def double_up_corner(move):
+    '''
+    prodouces the double of the input move.
+
+    "U":  ((3, 0, 1, 2, 4, 5, 6, 7)
+    '''
+    my_tuple = (
+        move.index(move.index(0)),  move.index(move.index(1)), move.index(move.index(2)), 
+        move.index(move.index(3)), move.index(move.index(4)), move.index(move.index(5)), 
+        move.index(move.index(6)),move.index(move.index(7))
+    )
+    return my_tuple
+
+
+
+if __name__ == "__main__":
+    print(inverse_corner(MYMOVE))
