@@ -2,6 +2,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List, Dict, Iterable
 import itertools
+import networkx as nx
+import matplotlib.pyplot as plt
+
 
 # Corner position indices:
 # 0: URF, 1: UFL, 2: ULB, 3: UBR, 4: DFR, 5: DLF, 6: DBL, 7: DRB
@@ -12,6 +15,17 @@ NUM_EDGES = 12
 
 ID_CORNERS = ((0, 1, 2, 3, 4, 5, 6, 7), (0, 0, 0, 0, 0, 0, 0, 0))
 ID_EDGES = ((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11), (0,)*12)
+
+CORNER_ADJ_EDGES = {
+    0: (0, 1, 4),      
+    1: (1, 2, 5),      
+    2: (2, 3, 6),     
+    3: (3, 0, 7),     
+    4: (4, 8, 9),  
+    5: (5, 9, 10), 
+    6: (6, 10, 11),    
+    7: (7, 8, 11) 
+}
 
 MOVE_CORNERS = {
     "U":  ((3, 0, 1, 2, 4, 5, 6, 7), (0, 0, 0, 0, 0, 0, 0, 0)),
@@ -45,12 +59,12 @@ MOVE_EDGES = {
     "U2": ((2, 3, 0, 1, 4, 5, 6, 7, 8, 9, 10, 11), (0,)*12),
     "U'": ((1, 2, 3, 0, 4, 5, 6, 7, 8, 9, 10, 11), (0,)*12),
 
-    "D":  ((0, 1, 2, 3, 5, 6, 7, 4, 8, 9, 10, 11), (0,)*12),
-    "D2": ((0, 1, 2, 3, 6, 7, 4, 5, 8, 9, 10, 11), (0,)*12),
-    "D'": ((0, 1, 2, 3, 7, 4, 5, 6, 8, 9, 10, 11), (0,)*12),
+    "D":  ((0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 8), (0,)*12),
+    "D2": ((0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 8, 9), (0,)*12),
+    "D'": ((0, 1, 2, 3, 4, 5, 6, 7, 11, 8, 9, 10), (0,)*12),
 
     "R":  ((4, 1, 2, 3, 8, 5, 6, 0, 7, 9, 10, 11), (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-    "R2": ((8, 1, 2, 7, 5, 6, 4, 0, 9, 10, 11), (0,)*12),
+    "R2": ((8, 1, 2, 3, 7, 5, 6, 4, 0, 9, 10, 11), (0,)*12),
     "R'": ((7, 1, 2, 3, 0, 5, 6, 8, 4, 9, 10, 11), (0,)*12),
 
     "L":  ((0, 1, 6, 3, 4, 2, 10, 7, 8, 9, 5, 11), (0,)*12),
@@ -59,13 +73,13 @@ MOVE_EDGES = {
 
     "F":  ((0, 5, 2, 3, 1, 9, 6, 7, 8, 4, 10, 11),  # orientation flips on F\,B
             (0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0)), #need to change this.
-    "F2": ((0, 8, 2, 5, 4, 1, 6, 9, 5, 4, 10, 11), (0,)*12),
+    "F2": ((0, 9, 2, 3, 5, 4, 6, 7, 8, 1, 10, 11, 11), (0,)*12),
     "F'": ((0, 4, 2, 3, 9, 1, 6, 7, 8, 5, 10, 11),
             (0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0)),
 
     "B":  ((0, 1, 2, 7, 4, 5, 3, 11, 8, 9, 10, 6),
             (0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1)),
-    "B2": ((0, 1, 2, 11, 4, 5, 7, 6, 8, 9, 7, 3), (0,)*12),
+    "B2": ((0, 1, 2, 11, 4, 5, 7, 6, 8, 9, 10, 3), (0,)*12),
     "B'": ((0, 1, 2, 6, 4, 5, 11, 3, 8, 9, 10, 7), 
            (0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1)),
 }
@@ -189,9 +203,61 @@ class Cube:
             self.edges = Cube.new_edges(self.edges, move)
 
         return (self.corners, self.edges)
+
+    def adjacency_graph(self):
+        """
+        Return an undirected bipartite graph whose nodes are
+          0‑7  = corner‑cubie IDs
+          8‑19 = edge‑cubie IDs (edgeID + 8)
+        An edge means “these two pieces are touching”.
+        """
+        G = nx.Graph()
+        cperm, _ = self.corners    
+        eperm, _ = self.edges    
+
+        G.add_nodes_from(range(8),  bipartite='corner') 
+        G.add_nodes_from(range(8, 20), bipartite='edge')
+
+        for cpos, adj_edges in CORNER_ADJ_EDGES.items(): #for each location
+            corner_cubie = cperm[cpos] #check which piece is in that location
+            for epos in adj_edges:   #for each touching edge location  
+                edge_cubie   = eperm[epos] #check what's in that spot
+                G.add_edge(corner_cubie, edge_cubie +8) #add a connection in G.
+        return G 
+    
+    
       
         
 
 if __name__ == "__main__":
     mycube = Cube()
-    print(mycube.apply("F U R L F"))
+    print()
+    print(mycube.apply("U B2 D' L2 U' B2 F2 R2 D2 R2 D' F2 L' R D2 L R"))
+    g = mycube.adjacency_graph()
+
+
+    # Get the bipartite node sets
+    corner_nodes = [n for n, d in g.nodes(data=True) if d['bipartite'] == 'corner']
+    edge_nodes = [n for n, d in g.nodes(data=True) if d['bipartite'] == 'edge']
+
+# Generate bipartite layout (requires specifying one node set)
+    pos = nx.bipartite_layout(g, corner_nodes)
+
+    '''
+    plt.figure(figsize=(8, 6))
+    nx.draw(g, with_labels=True, node_color='lightblue', node_size=700, font_weight='bold')
+    plt.title("Cube Adjacency Graph")
+    plt.show()
+    node_colors = ['skyblue' if n in corner_nodes else 'lightgreen' for n in g.nodes()]
+    '''
+
+    node_colors = ['skyblue' if n in corner_nodes else 'lightgreen' for n in g.nodes()]
+    plt.figure(figsize=(10, 8))
+    nx.draw(g, pos, with_labels=True, node_color=node_colors, node_size=800, font_weight='bold')
+    plt.title("Cube Adjacency Graph (Bipartite Layout)")
+    plt.show()
+        
+
+    #todo: code visuals.
+
+
