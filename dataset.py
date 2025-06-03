@@ -4,8 +4,10 @@ import numpy as np
 from scipy import sparse
 import matplotlib.pyplot as plt
 import time
+from sklearn.linear_model import ElasticNetCV 
+import csv, pathlib, helpers, state
 
-NUM_SCRAMBLES = 20
+NUM_SCRAMBLES = 1000
 
 
 def graph_to_vec(G):
@@ -48,12 +50,27 @@ def main():
     compute data for the linear regression.
     '''
     scrambles = []
-    for i in range(400): #because nissy is often giving seg faults, compute scrambles in blocks
-        scramble_block = helpers.get_dr_scrambles(NUM_SCRAMBLES)
-        scrambles += scramble_block
-        print("Done generating a block of scrambles")
+    OUT = pathlib.Path("scrambles.csv")
+    header_written = OUT.exists()      # don’t duplicate header
 
-    soln_lengths = helpers.get_solns(scrambles)
+    with OUT.open("a", newline="") as f:
+        writer = csv.writer(f)
+        if not header_written:
+            writer.writerow(["scramble", "opt_len"])
+        for block in range(100): #because nissy is often giving seg faults, compute scrambles in blocks
+            scramble_block = helpers.get_dr_scrambles(NUM_SCRAMBLES)
+            soln_block = helpers.get_solns(scramble_block)
+            scrambles += scramble_block
+            writer.writerows(zip(scramble_block, soln_block))
+            print(f"block {block:03d} done")
+            
+    '''
+
+
+
+    
+
+    
     scrambles.pop()
 
     bips = state.Cube.get_bips(scrambles)
@@ -61,11 +78,23 @@ def main():
     y = np.array(soln_lengths)
     print(len(scrambles))
     print(len(soln_lengths))
-    visualize(X)
+    model = ElasticNetCV(cv=5, l1_ratio=0.7).fit(X, y) #lasso model
+    w  = model.coef_.reshape(8, 12)    # w[c, e]
+    bias = model.intercept_
+    np.save("w_bipartite.npy", w)       # easy reload later
+    
+    w = np.load("w_bipartite.npy")
+    plt.figure(figsize=(6, 4))
+    plt.imshow(w)                 # default colormap; no explicit colors
+    plt.colorbar(label="Weight")
+    plt.xlabel("Edge ID (0‒11)")
+    plt.ylabel("Corner ID (0‒7)")
+    plt.tight_layout()
+    plt.show()
 
-
-        
-    return None
+    #TODO: recompute the state.py functions specifically for the important domino pieces, with 8 corners and 8 edges.
+    '''
+    
 
 if __name__ == "__main__":
     main()
