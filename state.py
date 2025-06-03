@@ -83,6 +83,31 @@ MOVE_EDGES = {
     "B'": ((0, 1, 2, 6, 4, 5, 11, 3, 8, 9, 10, 7), 
            (0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1)),
 }
+INDEX_TO_COLOURS = {
+    # Corners (IDs 0–7)
+    0: "WRG",
+    1: "WGO",
+    2: "WOB",
+    3: "WBR",
+    4: "YGR",
+    5: "YOG",
+    6: "YBO",
+    7: "YRB",
+
+    # Edges (IDs 8–19)
+    8:  "WR",
+    9:  "WG",
+    10: "WO",
+    11: "WB",
+    12: "GR",
+    13: "GO",
+    14: "BO",
+    15: "BR",
+    16: "YR",
+    17: "YG",
+    18: "YO",
+    19: "YB"
+}
   
 def inverse_corner(move):
     ''' Inverts the corner permutation represented by the tuple. 
@@ -215,8 +240,8 @@ class Cube:
         cperm, _ = self.corners    
         eperm, _ = self.edges    
 
-        G.add_nodes_from(range(8),  bipartite='corner') 
-        G.add_nodes_from(range(8, 20), bipartite='edge')
+        G.add_nodes_from(range(8),  part='corner') 
+        G.add_nodes_from(range(8, 20), part='edge')
 
         for cpos, adj_edges in CORNER_ADJ_EDGES.items(): #for each location
             corner_cubie = cperm[cpos] #check which piece is in that location
@@ -225,39 +250,46 @@ class Cube:
                 G.add_edge(corner_cubie, edge_cubie +8) #add a connection in G.
         return G 
     
+
+    @staticmethod
+    def get_bips(scrambles):
+        '''returns the list of adjacency graphs corresponding to the given scrambles'''
+        bips = []
+        for scramble in scrambles:
+            newcube = Cube()
+            newcube.apply(scramble)
+            bips.append(newcube.adjacency_graph())
+        return bips
     
-      
-        
+    @staticmethod
+    def draw_adjacency_graph(G):
+        '''
+        visualize the given adjacency graph.
+        '''
+        corner_nodes = [n for n, d in G.nodes(data=True) if d['part'] == 'corner']
+        edge_nodes = [n for n, d in G.nodes(data=True) if d['part'] == 'edge']
+        pos = nx.bipartite_layout(G, corner_nodes)
+
+        node_drawing_colors = ['lightgreen' if n in corner_nodes else 'pink' for n in G.nodes()]
+        labels = {node: INDEX_TO_COLOURS.get(node) for node in G.nodes()}
+
+        plt.figure(figsize=(10, 8))
+        nx.draw(G, pos, with_labels=True, labels = labels, node_color=node_drawing_colors, node_size=2000)
+        plt.title("Cube Adjacency Graph (Bipartite Layout)")
+        plt.show()
+
+
+def main():
+
+    mycube = Cube()
+    
+    print(mycube.apply("R2 L2 U2 D2 F2 B2"))
+    g = mycube.adjacency_graph()
+    Cube.draw_adjacency_graph(g)
+
+
 
 if __name__ == "__main__":
-    mycube = Cube()
-    print()
-    print(mycube.apply("U B2 D' L2 U' B2 F2 R2 D2 R2 D' F2 L' R D2 L R"))
-    g = mycube.adjacency_graph()
-
-
-    # Get the bipartite node sets
-    corner_nodes = [n for n, d in g.nodes(data=True) if d['bipartite'] == 'corner']
-    edge_nodes = [n for n, d in g.nodes(data=True) if d['bipartite'] == 'edge']
-
-# Generate bipartite layout (requires specifying one node set)
-    pos = nx.bipartite_layout(g, corner_nodes)
-
-    '''
-    plt.figure(figsize=(8, 6))
-    nx.draw(g, with_labels=True, node_color='lightblue', node_size=700, font_weight='bold')
-    plt.title("Cube Adjacency Graph")
-    plt.show()
-    node_colors = ['skyblue' if n in corner_nodes else 'lightgreen' for n in g.nodes()]
-    '''
-
-    node_colors = ['skyblue' if n in corner_nodes else 'lightgreen' for n in g.nodes()]
-    plt.figure(figsize=(10, 8))
-    nx.draw(g, pos, with_labels=True, node_color=node_colors, node_size=800, font_weight='bold')
-    plt.title("Cube Adjacency Graph (Bipartite Layout)")
-    plt.show()
-        
-
-    #todo: code visuals.
+    main()
 
 

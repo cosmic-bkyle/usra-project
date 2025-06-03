@@ -79,6 +79,10 @@ def get_corner_solns(scrambles):
     #return solns, lengths
     time.sleep(0.5)
     return lengths
+
+
+
+
 def get_solns(scrambles):
     '''Generates a list of optimal solution lengths to the scrambles.'''
 
@@ -118,3 +122,20 @@ def get_solns(scrambles):
     #return solns, lengths
     time.sleep(0.5)
     return lengths 
+    
+
+
+    ''' Code to try and fix the bug of not solving the last scramble:
+
+    blocks = [b.strip()                      # drop empty strings
+          for b in re.split(r'>>> Line:', nissy_output)
+          if b.strip()]
+    lengths = []
+    for blk in blocks:
+        solution_line = blk.split('\n', 1)[1]          # second line
+        length = int(re.search(r'\((\d+)\)', solution_line).group(1))
+        lengths.append(length)
+    
+    '''
+    
+    

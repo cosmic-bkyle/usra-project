@@ -26,7 +26,7 @@ def main():
     print(time.time() - start)
 
     corners_block = helpers.get_corner_solns(scrambles)
-    solutions_block = helpers.get_solns(scrambles)
+    solutions_block = helpers.get_solns(scrambles) #integer list
     corners_lengths += (corners_block)
     solution_lengths += (solutions_block) 
     print(len(scrambles))
