@@ -80,7 +80,7 @@ def regress(X, y):
     
     w = np.load("w_bipartite.npy")
     plt.figure(figsize=(6, 4))
-    plt.imshow(w)                 # default colormap; no explicit colors
+    plt.imshow(w)                
     plt.colorbar(label="Weight")
     plt.xlabel("Edge ID (0‒11)")
     plt.ylabel("Corner ID (0‒7)")
@@ -91,22 +91,21 @@ def regress(X, y):
 
 
 def main():
-    '''
-    
-    '''
-    #append_to_csv("scrambles.csv") #generate scramble, solution pairs.
+    ''' learn weights of piecewise connections between corner and edges. 
+    Populate a grid with corners x edges with coloured-in weights '''
+
+
     start = time.time()
     df = pd.read_csv("scrambles.csv",
                  names=["scramble", "opt_len"],   # give column names
                  header=None)
-    scrambles = df["scramble"].tolist()
-    soln_lengths    = df["opt_len"].astype(int).tolist()
+    scrambles = df["scramble"].tolist()[:100000]
+    soln_lengths    = df["opt_len"].astype(int).tolist()[:100000]
     y = np.array(soln_lengths)
     bips = state.Cube.get_bips(scrambles) # finishing this line takes 10.83s
     X = make_design_matrix(bips) # finishing this line takes 100s.
 
     regress(X, y)
-    
     
 
 if __name__ == "__main__":

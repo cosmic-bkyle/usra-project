@@ -270,7 +270,7 @@ class Cube:
         edge_nodes = [n for n, d in G.nodes(data=True) if d['part'] == 'edge']
         pos = nx.bipartite_layout(G, corner_nodes)
 
-        node_drawing_colors = ['lightgreen' if n in corner_nodes else 'pink' for n in G.nodes()]
+        node_drawing_colors = ['lightgreen' if n in corner_nodes else 'lightskyblue' for n in G.nodes()]
         labels = {node: INDEX_TO_COLOURS.get(node) for node in G.nodes()}
 
         plt.figure(figsize=(10, 8))
@@ -280,10 +280,12 @@ class Cube:
 
 
 def main():
-
+    '''
+    visualize bipartite adjacnecy graph of input scramble.
+    '''
     mycube = Cube()
     
-    print(mycube.apply("R2 L2 U2 D2 F2 B2"))
+    print(mycube.apply("U L2 U L2 U2 L2 D B2 D L2 U' B2 U' B2 R2"))
     g = mycube.adjacency_graph()
     Cube.draw_adjacency_graph(g)
 
