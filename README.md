@@ -5,7 +5,7 @@ This is a research‑oriented codebase exploring machine learning techniques to 
 ---
 ## Source Code
 
-**[state.py](https://github.com/cosmic-bkyle/usra-project/blob/main/state.py)** provides a cube state representation after user-input move sequences from the [Rubik's Cube Group](https://en.wikipedia.org/wiki/Rubik%27s_Cube_group). 
+**[state.py](https://github.com/cosmic-bkyle/usra-project/blob/main/state.py)** provides an object-oriented cube state representation after user-input sequences of moves from the [Rubik's Cube Group](https://en.wikipedia.org/wiki/Rubik%27s_Cube_group). 
 
 **[helpers.py](https://github.com/cosmic-bkyle/usra-project/blob/main/helpers.py)** contains helper functions to generate random elements of certain subsets of the [domino subgroup](https://www.speedsolving.com/wiki/index.php/Domino_Reduction), visualize the adjacent pieces of a cube state as a bipartite graph, and more. With the help of [nissy](https://nissy.tronto.net/), over 100,000 random domino scrambles along with their optimal solution lengths are present in **[scrambles.csv](https://github.com/cosmic-bkyle/usra-project/blob/main/scrambles.csv)**.
 
