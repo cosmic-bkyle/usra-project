@@ -281,11 +281,11 @@ class Cube:
 
 def main():
     '''
-    visualize bipartite adjacnecy graph of input scramble.
+    visualize bipartite adjacency graph of input scramble.
     '''
     mycube = Cube()
     
-    print(mycube.apply("U L2 U L2 U2 L2 D B2 D L2 U' B2 U' B2 R2"))
+    print(mycube.apply("D F2 U R2 L2 D F2 D' L2 B2 D"))
     g = mycube.adjacency_graph()
     Cube.draw_adjacency_graph(g)
 
