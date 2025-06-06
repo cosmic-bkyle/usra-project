@@ -1,6 +1,6 @@
 # Rubik's Cube USRA Project
 
-This is a research‑oriented codebase exploring machine learning techniques to try to improve human performance in the [Fewest Moves Challenge](https://www.speedsolving.com/wiki/index.php?title=Fewest_Moves_Challenge) for the standard Rubik’s Cube. The project is underway for the Summer of 2025!
+This is a research‑oriented codebase exploring machine learning techniques to try to improve human performance in the [Fewest Moves Challenge](https://www.speedsolving.com/wiki/index.php?title=Fewest_Moves_Challenge) for the standard Rubik’s Cube. The project is underway for the summer of 2025!
 
 ---
 ## Source Code
