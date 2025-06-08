@@ -26,6 +26,18 @@ CORNER_ADJ_EDGES = {
     6: (6, 10, 11),    
     7: (7, 8, 11) 
 }
+CORNER_ADJ_EDGES_NO_SLICE = {
+    0: (0, 1),
+    1: (1, 2),
+    2: (2, 3),
+    3: (3, 0),
+    4: (8, 9),
+    5: (9, 10),
+    6: (10, 11),
+    7: (11, 8)
+}
+
+
 
 MOVE_CORNERS = {
     "U":  ((3, 0, 1, 2, 4, 5, 6, 7), (0, 0, 0, 0, 0, 0, 0, 0)),
@@ -108,6 +120,16 @@ INDEX_TO_COLOURS = {
     18: "YO",
     19: "YB"
 }
+PAIRS = { #(cornerID, edgeID that touch. We have two "styles" of pairs: a and b. )
+    "a": [(0, 0), (1, 1), (2, 2), (3, 3), (4, 9), (5, 10), (6, 11), (7, 8)],
+    "b": [(0, 1), (1, 2), (2, 3), (3, 0), (4, 8), (5, 9), (6, 10), (7, 11)]
+}
+Ls = { # corner, edge 1, edge2
+    "top": [(0, 0, 1), (1, 1, 2), (2, 2, 3), (3, 3, 0)],
+    "bottom": [(4, 9, 8), (5, 10, 9), (6, 11, 10), (7, 8, 11)]
+}
+LINES = [(0, 1, 1), (1, 2, 2), (2, 3, 3), (3, 0, 0), (5, 4, 9), (6, 5, 10), (7, 6, 11), (4, 7, 8)]# format (corner1, corner2, edge)
+
   
 def inverse_corner(move):
     ''' Inverts the corner permutation represented by the tuple. 
@@ -261,6 +283,55 @@ class Cube:
             bips.append(newcube.adjacency_graph())
         return bips
     
+    def amt_pairs(self):
+        '''returns a tuple of the number of a-pairs and b-pairs present in the domino layers'''
+        a_pairs = 0
+        b_pairs = 0
+        for a_spot in PAIRS["a"]:
+            (corner_spot, edge_spot) = a_spot #unpack the tuple
+            if (self.corners[0][corner_spot], self.edges[0][edge_spot]) in PAIRS["a"]:
+                a_pairs += 1
+        for b_spot in PAIRS["b"]:
+            (corner_spot, edge_spot) = b_spot
+            if (self.corners[0][corner_spot], self.edges[0][edge_spot]) in PAIRS["b"]:
+                b_pairs += 1
+        return a_pairs, b_pairs
+    def amt_lines(self):
+        ''' returns the number of corner-edge-corner lines.
+        '''
+        lines = 0
+        for (c1, c2, e)  in LINES: #(corner, edge, edge)
+            mytuple = (self.corners[0][c1], self.corners[0][c2], self.edges[0][e]) 
+            if mytuple in LINES:
+                lines += 1
+        return lines
+
+        
+    def amt_Ls(self):
+        '''returns tuples of # good Ls and # bad Ls. Ls are encoded c, e1, e2 where e1 e2 are ordered clockwise 
+        '''
+        good_Ls = 0
+        bad_Ls = 0
+        for (t1, t2, t3) in Ls["top"]:
+            triple  = (self.corners[0][t1], self.edges[0][t2], self.edges[0][t3])
+            if triple in Ls["top"]:
+                good_Ls += 1
+            elif triple in Ls["bottom"]:
+                bad_Ls += 1
+                
+        for (t1, t2, t3) in Ls["bottom"]:
+            triple  = (self.corners[0][t1], self.edges[0][t2], self.edges[0][t3])   
+            if triple in Ls["top"]:
+                bad_Ls += 1
+            elif triple in Ls["bottom"]:
+                good_Ls += 1
+        return good_Ls, bad_Ls
+
+        
+
+
+
+    
     @staticmethod
     def draw_adjacency_graph(G):
         '''
@@ -281,15 +352,11 @@ class Cube:
 
 def main():
     '''
-    visualize bipartite adjacency graph of input scramble.
+    visualize bipartite adjacency graph of input scramble
     '''
     mycube = Cube()
+    mycube.apply("L2 U' D B2 L2 U' D F2 U' R2 U F2 U' R2 B2")
     
-    print(mycube.apply("D F2 U R2 L2 D F2 D' L2 B2 D"))
-    g = mycube.adjacency_graph()
-    Cube.draw_adjacency_graph(g)
-
-
 
 if __name__ == "__main__":
     main()

@@ -8,7 +8,7 @@ from sklearn.linear_model import ElasticNetCV
 import csv, pathlib, helpers, state
 import pandas as pd
 
-NUM_SCRAMBLES = 1000
+NUM_SCRAMBLES = 10000
 
 
 def graph_to_vec(G):
@@ -93,6 +93,25 @@ def regress(X, y):
 def main():
     ''' learn weights of piecewise connections between corner and edges. 
     Populate a grid with corners x edges with coloured-in weights '''
+    scrambles = []
+    OUT = pathlib.Path("scrambles.csv")
+    header_written = OUT.exists()      # don’t duplicate header
+    print('hi')
+
+    with OUT.open("a", newline="") as f:
+        writer = csv.writer(f)
+        if not header_written:
+            writer.writerow(["scramble", "opt_len"])
+        for block in range(100): #because nissy is often giving seg faults, compute scrambles in blocks
+            scramble_block = helpers.get_dr_scrambles(NUM_SCRAMBLES)
+            soln_block = helpers.get_solns(scramble_block)
+            scrambles += scramble_block
+            writer.writerows(zip(scramble_block, soln_block))
+            print(f"block {block:03d} done")
+            
+
+
+    '''
 
 
     start = time.time()
@@ -106,7 +125,7 @@ def main():
     X = make_design_matrix(bips) # finishing this line takes 100s.
 
     regress(X, y)
-    
+    '''
 
 if __name__ == "__main__":
     main()
