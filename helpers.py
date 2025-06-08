@@ -44,7 +44,7 @@ def get_corner_solns(scrambles):
     '''Generates a list of optimal corner solution lengths to the scrambles.'''
 
     #open a subprocess
-    p = subprocess.Popen(["nissy", "-b"], shell = True, cwd = "/Users/user/Desktop/nissy-2.0.7",stdout=subprocess.PIPE,stdin=subprocess.PIPE)
+    p = subprocess.Popen(["nissy", "-b"], shell = True, cwd = "/Users/user/Desktop/nissy-2.0.8",stdout=subprocess.PIPE,stdin=subprocess.PIPE)
     
     #format the scramble list into a string to pass to stdin for nissy
     mylist = []
@@ -87,7 +87,7 @@ def get_solns(scrambles):
     '''Generates a list of optimal solution lengths to the scrambles.'''
 
     #open a subprocess
-    p = subprocess.Popen(["nissy", "-b"], shell = True, cwd = "/Users/user/Desktop/nissy-2.0.7",stdout=subprocess.PIPE,stdin=subprocess.PIPE)
+    p = subprocess.Popen(["nissy", "-b"], shell = True, cwd = "/Users/user/Desktop/nissy-2.0.8",stdout=subprocess.PIPE,stdin=subprocess.PIPE)
     
     #format the scramble list into a string to pass to stdin for nissy
     mylist = []
