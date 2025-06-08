@@ -17,6 +17,6 @@ See **[journal.pdf](./journal.pdf)** for full notes
 
 | Date           | Highlights                                                                     |
 | -------------- | -------------------------------------------------------------------------------|
-| 2025‑05‑20 | Kick‑off: clarified goals & HTR subset stats task                                  |
+| 2025‑05‑20 | Clarified high-level goals & HTR subset stats task                                 |
 | 2025‑05‑27 | Designed graph‑based blockiness feature                                            |
 | 2025‑06‑03 | Implemented OOP cube, generated 100k DR dataset, fitted Lasso                      |
