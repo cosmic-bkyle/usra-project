@@ -15,15 +15,11 @@ mystate.amt_Ls()
 
 import numpy as np
 import state
-import helpers
-import time
 from sklearn.model_selection import train_test_split
 import pandas as pd
-from sklearn.linear_model import ElasticNetCV
 from sklearn.metrics import mean_absolute_error
-from sklearn.linear_model import RidgeCV
 import matplotlib.pyplot as plt
-from sklearn.linear_model import ElasticNetCV
+from sklearn.linear_model import LassoCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 from sklearn.metrics import mean_absolute_error
@@ -32,7 +28,26 @@ import csv
 import json
 
 
-
+SEARCH_SPACE = [ #combinations of features to iterate through 
+    {
+        "use_pairs": 1,
+        "use_lines": 1,
+        "use_Ls": 1,
+        "alpha": [1e-4, 5e-4, 1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
+    },
+    {
+        "use_pairs": 1,
+        "use_lines": 1,
+        "use_Ls": 0,
+        "alpha": [1e-4, 5e-4, 1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
+    },
+    {
+        "use_pairs": 1,
+        "use_lines": 0,
+        "use_Ls": 1,
+        "alpha": [1e-4, 5e-4, 1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
+    },
+    ]
 
 
 def features_count(scramble) -> np.ndarray:
@@ -98,11 +113,13 @@ def run(cfg, scrambles_trainvalid, solns_trainvalid, seed =26):
     X_valid = make_design(scrambles_valid, cfg)
     model = make_pipeline(
         StandardScaler(),
-        ElasticNetCV(
-            alphas=cfg["alpha"],
-            l1_ratio=cfg["l1"],
-            cv=5,                #inner cross validation on train fold
-            random_state=seed))
+        LassoCV(
+            alphas=[1e-4, 5e-4, 1e-3, 5e-3, 1e-2, 5e-2, 1e-1], 
+            cv=5,                  
+            random_state=seed,
+            n_jobs=-1,             
+            max_iter=10_000 
+        ))
 
     model.fit(X_train, y_tr)
     val_mae = mean_absolute_error(y_valid, model.predict(X_valid))
@@ -129,14 +146,6 @@ def main():
         all_scrambles, all_solns, test_size = 0.10, random_state = 42 
     ) 
 
-    #grid for iterating through combinations of hyperparameters
-    search_space = [ 
-    {"use_pairs":1,"use_lines":1,"use_Ls":1, "l1":0.0, "alpha":[0.1,1,10]},
-    {"use_pairs":1,"use_lines":1,"use_Ls":0, "l1":0.0, "alpha":[0.1,1,10]},
-    {"use_pairs":1,"use_lines":0,"use_Ls":1, "l1":0.5, "alpha":[0.01,0.1,1]},
-    {"use_pairs":1,"use_lines":0,"use_Ls":1, "l1":1.0, "alpha":[0.01,0.1,1]},
-    ]
-
     #to log performance of each combination of hyperparams
     logfile = pathlib.Path("experiments_log.csv") 
     if not logfile.exists():
@@ -147,7 +156,7 @@ def main():
     best_mae, best_cfg, best_model = np.inf, None, None
 
     #Run on each configuration, pick the best model on the validation set to move on to the test set
-    for cfg in search_space:
+    for cfg in SEARCH_SPACE:
         val_mae, model = run(cfg, scrambles_trainvalid, solns_trainvalid)
         print(cfg, "gives mean actual error ", val_mae)
 
@@ -168,7 +177,7 @@ def main():
         print("**Final Test MAE:**", test_mae)
 
         #print final weights
-        enet = best_model.named_steps["elasticnetcv"]
+        enet = best_model.named_steps["lassocv"]
         feature_names = ["pair_a", "pair_b", "goodL", "badL", "lines"]
 
         print("\nLearned weights:")
