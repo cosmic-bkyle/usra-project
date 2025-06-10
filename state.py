@@ -188,7 +188,7 @@ def double_up_corner(move):
 
     
 
-class Cube:
+class State:
     def __init__(self, moves = ""):
         self.corners = ID_CORNERS
         self.edges = ID_EDGES
@@ -246,8 +246,8 @@ class Cube:
         movelist = moves.split(" ")
         for move in movelist:
             #self.corners = apply_corners(move)
-            self.corners = Cube.new_corners(self.corners, move)
-            self.edges = Cube.new_edges(self.edges, move)
+            self.corners = State.new_corners(self.corners, move)
+            self.edges = State.new_edges(self.edges, move)
 
         return (self.corners, self.edges)
 
@@ -278,7 +278,7 @@ class Cube:
         '''returns the list of adjacency graphs corresponding to the given scrambles'''
         bips = []
         for scramble in scrambles:
-            newcube = Cube()
+            newcube = State()
             newcube.apply(scramble)
             bips.append(newcube.adjacency_graph())
         return bips
@@ -354,7 +354,7 @@ def main():
     '''
     visualize bipartite adjacency graph of input scramble
     '''
-    mycube = Cube()
+    mycube = State()
     mycube.apply("L2 U' D B2 L2 U' D F2 U' R2 U F2 U' R2 B2")
     
 
