@@ -4,6 +4,9 @@ import subprocess
 import pandas as pd
 import time
 import re
+from vfmc_core import Cube
+from vfmc import attempt
+
 
 def get_dr_scrambles(n):
 
@@ -117,25 +120,20 @@ def get_solns(scrambles):
     for i in nissy_output:
         soln = i.split('\n')[1]
         soln = re.split(r'\(|\)',soln)
-        #solns.append(soln[0])
+        #solns.append(soln[0])z
         lengths.append(int(soln[1]))
     #return solns, lengths
     time.sleep(0.5)
     return lengths 
-    
+def get_subset(scramble):
+    cube = Cube(scramble)
+    step = attempt.PartialSolution("htr","ud")
 
+def main():
+    step = attempt.PartialSolution("htr","ud")
+    cube = Cube("U R2 U R2 U")
+    cube = Cube ("R2")
+    print(type(step.step_info.case_name(cube)))
 
-    ''' Code to try and fix the bug of not solving the last scramble:
-
-    blocks = [b.strip()                      # drop empty strings
-          for b in re.split(r'>>> Line:', nissy_output)
-          if b.strip()]
-    lengths = []
-    for blk in blocks:
-        solution_line = blk.split('\n', 1)[1]          # second line
-        length = int(re.search(r'\((\d+)\)', solution_line).group(1))
-        lengths.append(length)
-    
-    '''
-    
-    
+if __name__ == "__main__":
+    main()
