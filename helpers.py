@@ -4,7 +4,7 @@ import subprocess
 import pandas as pd
 import time
 import re
-from vfmc_core import Cube
+from vfmc_core import Cube # type: ignore
 from vfmc import attempt
 
 
@@ -125,15 +125,11 @@ def get_solns(scrambles):
     #return solns, lengths
     time.sleep(0.5)
     return lengths 
+
+
+
+
 def get_subset(scramble):
     cube = Cube(scramble)
     step = attempt.PartialSolution("htr","ud")
-
-def main():
-    step = attempt.PartialSolution("htr","ud")
-    cube = Cube("U R2 U R2 U")
-    cube = Cube ("R2")
-    print(type(step.step_info.case_name(cube)))
-
-if __name__ == "__main__":
-    main()
+    return (step.step_info.case_name(cube))
