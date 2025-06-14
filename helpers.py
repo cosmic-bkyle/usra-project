@@ -127,8 +127,6 @@ def get_solns(scrambles):
     return lengths 
 
 
-
-
 def get_subset(scramble):
     cube = Cube(scramble)
     step = attempt.PartialSolution("htr","ud")
