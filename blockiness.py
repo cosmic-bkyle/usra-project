@@ -1,5 +1,5 @@
 
-''' Module for learning the weights of various types of blocks on general scrambles.
+''' Module for learning the weights of various types of blocks on general scrambles (no regards to other features).
 
 Features are computed using functions in state.py and helpers.py as follows:
 
