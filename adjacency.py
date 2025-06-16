@@ -1,3 +1,5 @@
+'''Module at an early point in the project to understand the weights of adjacent piece relations.'''
+
 import helpers
 import state
 import numpy as np
@@ -91,10 +93,8 @@ def regress(X, y):
 
 
 def main():
-    ''' learn weights of piecewise connections between corner and edges. 
-    Populate a grid with corners x edges with coloured-in weights 
-    
-
+    '''learn weights of piecewise connections between corner and edges. 
+    Populate a grid with corners x edges with coloured-in weights '''
 
     start = time.time()
     df = pd.read_csv("scrambles.csv",
@@ -106,8 +106,7 @@ def main():
     bips = state.State.get_bips(scrambles) # finishing this line takes 10.83s
     X = make_design_matrix(bips) # finishing this line takes 100s.
 
-    regress(X, y)'''
-    append_to_csv("scrambles.csv")
+    regress(X, y)
     
 
 if __name__ == "__main__":
