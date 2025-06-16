@@ -43,47 +43,6 @@ def half_turns(k):
         scramble.append(move)
         n = n+1
     return scramble
-def get_corner_solns(scrambles):
-    '''Generates a list of optimal corner solution lengths to the scrambles.'''
-
-    #open a subprocess
-    p = subprocess.Popen(["nissy", "-b"], shell = True, cwd = "/Users/user/Desktop/nissy-2.0.8",stdout=subprocess.PIPE,stdin=subprocess.PIPE)
-    
-    #format the scramble list into a string to pass to stdin for nissy
-    mylist = []
-    for scramble in scrambles:
-        mylist.append("\n" + scramble)
-    to_input = "solve corners -i -t 20\n" + "\n".join(scrambles) + "\n"
-    nissy_output, _ = p.communicate(input=bytes(to_input,'utf-8'))
-    nissy_output = nissy_output.decode()
-
-    ''' At this point, output appears as:
-
-        >>> Line: D U2 F D B' F L2 D' F2 R2 L B2 L' U2 B2 R F2 L' D2
-        U2 R2 F2 L B2 D' R2 D' F U L2 B' U' R2 D2 R2 U (17)
-        >>> Line: D B R U' B' L2 U L U D2 R L B2 U2 L2 x2 R U2 B2 L F2
-        D' F R' D B L2 B R2 L U L U2 B D' U R U F2 (18)
-    '''
-    nissy_output = re.split(r'>>> Line: |nissy', nissy_output)
-    nissy_output.pop(0)
-    nissy_output.pop(0)
-    nissy_output.pop()
-    nissy_output.pop()
-
-    solns = []
-    lengths = []
-
-    #loop through each block of the output which corresponds to one scramble.
-    for i in nissy_output:
-        soln = i.split('\n')[1]
-        soln = re.split(r'\(|\)',soln)
-        #solns.append(soln[0])
-        lengths.append(int(soln[1]))
-    #return solns, lengths
-    time.sleep(0.5)
-    return lengths
-
-
 
 
 def get_solns(scrambles):
@@ -127,7 +86,53 @@ def get_solns(scrambles):
     return lengths 
 
 
-def get_subset(scramble):
-    cube = Cube(scramble)
-    step = attempt.PartialSolution("htr","ud")
-    return (step.step_info.case_name(cube))
+def get_corner_solns(scrambles):
+    '''Generates a list of optimal corner solution lengths to the scrambles.
+    
+    NOTE: bugged; neither parses nor appends final corner solution
+    '''
+
+    #open a subprocess
+    p = subprocess.Popen(["nissy", "-b"], shell = True, cwd = "/Users/user/Desktop/nissy-2.0.8",stdout=subprocess.PIPE,stdin=subprocess.PIPE)
+    
+    #format the scramble list into a string to pass to stdin for nissy
+    mylist = []
+    for scramble in scrambles:
+        mylist.append("\n" + scramble)
+    to_input = "solve corners -i -t 20\n" + "\n".join(scrambles) + "\n"
+    nissy_output, _ = p.communicate(input=bytes(to_input,'utf-8'))
+    nissy_output = nissy_output.decode()
+
+    ''' At this point, output appears as:
+
+        >>> Line: D U2 F D B' F L2 D' F2 R2 L B2 L' U2 B2 R F2 L' D2
+        U2 R2 F2 L B2 D' R2 D' F U L2 B' U' R2 D2 R2 U (17)
+        >>> Line: D B R U' B' L2 U L U D2 R L B2 U2 L2 x2 R U2 B2 L F2
+        D' F R' D B L2 B R2 L U L U2 B D' U R U F2 (18)
+    '''
+    nissy_output = re.split(r'>>> Line: |nissy', nissy_output)
+    nissy_output.pop(0)
+    nissy_output.pop(0)
+    nissy_output.pop()
+    nissy_output.pop()
+
+    solns = []
+    lengths = []
+
+    #loop through each block of the output which corresponds to one scramble.
+    for i in nissy_output:
+        soln = i.split('\n')[1]
+        soln = re.split(r'\(|\)',soln)
+        #solns.append(soln[0])
+        lengths.append(int(soln[1]))
+    #return solns, lengths
+    time.sleep(0.5)
+    return lengths
+
+def get_subsets(scrambles):
+    subsets = []
+    for scramble in scrambles:
+        cube = Cube(scramble)
+        step = attempt.PartialSolution("htr","ud")
+        subsets.append(str(step.step_info.case_name(cube)))
+    return subsets
