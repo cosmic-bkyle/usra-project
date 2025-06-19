@@ -1,0 +1,24 @@
+Learned blockiness weights (how much each block adds to the guessed movecount) from 500k dr scrambles, 90/10 train-test split.
+
+pair_a: -0.1788383973465325
+pair_b: -0.17747690719481923
+badL: 0.035517399193233275
+goodL: -0.01603269173109096
+lines: 0.05333147921972953
+Bias: 13.578229629629629
+
+Mean actual error: 0.8570 
+
+Notes for 1m set:
+- mean corner solution 8.285799, mean full solution 13.580451
+- pearson correlation between corners and soln is 0.515
+
+Final linear scoring weights (1 million scrambles), 85 / 15 split
+
+Bias: 13.885504045506273
+Weights: {'subset_dev': np.float64(0.48869033035039605), 'corner_dev': np.float64(0.19645535011114668), 'pairs_a': np.float64(-0.16581759596099624), 'pairs_b': np.float64(-0.16498669243675892), 'lines': np.float64(0.03215225699166824), 'good_L': np.float64(-0.01745540869875801), 'bad_L': np.float64(0.050623909144940166)}
+
+
+Test MAE (unrounded): 0.6625195601036866
+Test MAE (rounded): 0.62204
+
