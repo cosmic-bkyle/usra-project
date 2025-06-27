@@ -2,12 +2,12 @@
 add remaining features to current 500k and then add another 500k for 1 million entries in a parquet file.
 '''
 import pandas as pd
-import helpers
+import dr_to_solved.helpers as helpers
 import numpy as np
 import csv
 import time
 import pathlib
-import state
+import dr_to_solved.state as state
 
 
 def extract_features(row):

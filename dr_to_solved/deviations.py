@@ -4,9 +4,9 @@ import pathlib
 import vfmc
 from scipy.stats import pearsonr
 import pandas as pd
-import helpers
+import dr_to_solved.helpers as helpers
 import numpy as np
-from learn_score import SUBSET_MEANS
+from dr_to_solved.learn_score import SUBSET_MEANS
 
 def baseline_error(path):
     '''

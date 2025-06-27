@@ -14,7 +14,7 @@ mystate.amt_Ls()
 '''
 
 import numpy as np
-import state
+import dr_to_solved.state as state
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from sklearn.metrics import mean_absolute_error

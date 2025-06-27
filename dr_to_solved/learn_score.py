@@ -9,8 +9,8 @@ from sklearn.pipeline import make_pipeline
 from sklearn.metrics import mean_absolute_error
 import csv
 from sklearn.linear_model import LinearRegression
-import helpers
-import state
+import dr_to_solved.helpers as helpers
+import dr_to_solved.state as state
 
 SUBSET_MEANS = {
                 '0c0 0e': 9.242,

@@ -1,4 +1,4 @@
-import helpers
+import dr_to_solved.helpers as helpers
 import sys
 import random
 import subprocess

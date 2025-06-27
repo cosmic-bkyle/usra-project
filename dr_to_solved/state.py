@@ -153,7 +153,7 @@ def inverse_corner(move):
     return (new_perm, new_ori)
 def inverse_edge(move):
     '''
-    "F":  ((0, 5, 2, 3, 1, 9, 6, 7, 8, 5, 10, 11),  # orientation flips on F\,B
+    "F":  ((0, 5, 2, 3, 1, 9, 6, 7, 8, 5, 10, 11),  # orientation flips on F/B
             (0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1))
             
             '''

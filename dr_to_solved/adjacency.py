@@ -1,13 +1,13 @@
 '''Module at an early point in the project to understand the weights of adjacent piece relations.'''
 
-import helpers
-import state
+import dr_to_solved.helpers as helpers
+import dr_to_solved.state as state
 import numpy as np
 from scipy import sparse
 import matplotlib.pyplot as plt
 import time
 from sklearn.linear_model import ElasticNetCV 
-import csv, pathlib, helpers, state
+import csv, pathlib, dr_to_solved.helpers as helpers, dr_to_solved.state as state
 import pandas as pd
 
 NUM_SCRAMBLES = 10000
