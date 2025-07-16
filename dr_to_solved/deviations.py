@@ -4,9 +4,9 @@ import pathlib
 import vfmc
 from scipy.stats import pearsonr
 import pandas as pd
-import dr_to_solved.helpers as helpers
+import helpers as helpers
 import numpy as np
-from dr_to_solved.learn_score import SUBSET_MEANS
+from learn_score import SUBSET_MEANS
 
 def baseline_error(path):
     '''
@@ -82,7 +82,7 @@ def subset_only_error(path):
     '''
     compute average difference between subset mean and corner optimal mean 
     '''
-    df = pd.read_csv(path)
+    df = pd.read_parquet(path)
     df["subset_dev"] = df["soln"] - df["subset"].map(SUBSET_MEANS)
     return df["subset_dev"].abs().mean()
 
@@ -102,10 +102,9 @@ def subset_corner_blocks_error(path):
     compute full error stats for final scoring function using subset, corners, and blocks.
     '''
 
-print(subset_only_error("labelled_drs.csv"))
+print(subset_only_error("dr_to_solved/labelled_drs.parquet")) #0.7043511495784429
 
 
-print("\nBaseline mean, stdev, mae, mse: \n" + str(baseline_error(pathlib.Path("labelled_drs.csv"))) + "\n")
-
+#print("\nBaseline mean, stdev, mae, mse: \n" + str(baseline_error(pathlib.Path("labelled_drs.csv"))) + "\n")#
 #output: (13.579197902062791, 1.0858620331962971, 0.8900005218446605)
 
