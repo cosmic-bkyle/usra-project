@@ -1,0 +1,135 @@
+First Neural Net:
+Feature vectors are the cube piece permutations (orientation doesn't matter in DR)
+
+First run
+epoch 00  val‑MAE 13.060
+epoch 01  val‑MAE 11.763
+epoch 02  val‑MAE 0.971
+epoch 03  val‑MAE 0.909
+epoch 04  val‑MAE 0.890
+epoch 05  val‑MAE 0.885
+epoch 06  val‑MAE 0.884
+epoch 07  val‑MAE 0.883
+Test mae: 0.8816480114746094
+
+Second run
+epoch 00  val‑MAE 0.957
+epoch 01  val‑MAE 0.960
+epoch 02  val‑MAE 0.942
+epoch 03  val‑MAE 1.217
+epoch 04  val‑MAE 1.101
+epoch 05  val‑MAE 1.258
+epoch 06  val‑MAE 1.528
+epoch 07  val‑MAE 0.839
+Test mae: 0.8374009436035156
+
+Second Neural Net: Just preengineered features. Saved in "oracle_features.pth"
+epoch 00 | train‑loss 1.9382 | val‑MAE 0.7624
+epoch 01 | train‑loss 0.3493 | val‑MAE 0.6760
+epoch 02 | train‑loss 0.3148 | val‑MAE 0.6610
+epoch 03 | train‑loss 0.3070 | val‑MAE 0.6554
+epoch 04 | train‑loss 0.3034 | val‑MAE 0.6574
+epoch 05 | train‑loss 0.3024 | val‑MAE 0.6590
+epoch 06 | train‑loss 0.3021 | val‑MAE 0.6527
+epoch 07 | train‑loss 0.3017 | val‑MAE 0.6510
+TEST‑MAE 0.6501913708496094
+
+With 15 epochs
+epoch 00 | train‑loss 1.7634 | val‑MAE 0.6718
+epoch 01 | train‑loss 0.3115 | val‑MAE 0.6589
+epoch 02 | train‑loss 0.3054 | val‑MAE 0.6573
+epoch 03 | train‑loss 0.3037 | val‑MAE 0.6565
+epoch 04 | train‑loss 0.3027 | val‑MAE 0.6537
+epoch 05 | train‑loss 0.3022 | val‑MAE 0.6521
+epoch 06 | train‑loss 0.3017 | val‑MAE 0.6540
+epoch 07 | train‑loss 0.3017 | val‑MAE 0.6546
+epoch 08 | train‑loss 0.3012 | val‑MAE 0.6522
+epoch 09 | train‑loss 0.3013 | val‑MAE 0.6536
+epoch 10 | train‑loss 0.3008 | val‑MAE 0.6572
+epoch 11 | train‑loss 0.3009 | val‑MAE 0.6560
+epoch 12 | train‑loss 0.3011 | val‑MAE 0.6509
+epoch 13 | train‑loss 0.3007 | val‑MAE 0.6531
+epoch 14 | train‑loss 0.3006 | val‑MAE 0.6534
+TEST‑MAE 0.65270861328125
+
+
+Third Neural Net: Engineered features and permutation.
+epoch 00 | train‑loss 1.1979 | val‑MAE 0.6655
+epoch 01 | train‑loss 0.3083 | val‑MAE 0.6569
+epoch 02 | train‑loss 0.3056 | val‑MAE 0.6573
+epoch 03 | train‑loss 0.3035 | val‑MAE 0.6521
+epoch 04 | train‑loss 0.3040 | val‑MAE 0.6516
+epoch 05 | train‑loss 0.3026 | val‑MAE 0.6525
+epoch 06 | train‑loss 0.3023 | val‑MAE 0.6573
+epoch 07 | train‑loss 0.3021 | val‑MAE 0.6521
+TEST‑MAE 0.6519399743652343
+
+Fourth neural net: features only, with two added 32 x 32 hidden layers.
+epoch 00 | train‑loss 1.7919 | val‑MAE 0.6652
+epoch 01 | train‑loss 0.3075 | val‑MAE 0.6538
+epoch 02 | train‑loss 0.3046 | val‑MAE 0.6528
+epoch 03 | train‑loss 0.3033 | val‑MAE 0.6538
+epoch 04 | train‑loss 0.3032 | val‑MAE 0.6589
+epoch 05 | train‑loss 0.3026 | val‑MAE 0.6583
+epoch 06 | train‑loss 0.3029 | val‑MAE 0.6578
+epoch 07 | train‑loss 0.3027 | val‑MAE 0.6528
+epoch 08 | train‑loss 0.3031 | val‑MAE 0.6513
+epoch 09 | train‑loss 0.3021 | val‑MAE 0.6515
+epoch 10 | train‑loss 0.3020 | val‑MAE 0.6556
+epoch 11 | train‑loss 0.3024 | val‑MAE 0.6531
+epoch 12 | train‑loss 0.3017 | val‑MAE 0.6538
+epoch 13 | train‑loss 0.3019 | val‑MAE 0.6505
+epoch 14 | train‑loss 0.3020 | val‑MAE 0.6506
+TEST‑MAE 0.64975583984375
+
+Fifth neural net; Wider wide-to-narrow hidden layers (256 -> 128 -> 64 -> 1): 
+using cpu
+epoch 00 | train‑loss 0.9584 | val‑MAE 0.6597
+epoch 01 | train‑loss 0.3043 | val‑MAE 0.6582
+epoch 02 | train‑loss 0.3034 | val‑MAE 0.6535
+epoch 03 | train‑loss 0.3027 | val‑MAE 0.6549
+epoch 04 | train‑loss 0.3019 | val‑MAE 0.6517
+epoch 05 | train‑loss 0.3018 | val‑MAE 0.6550
+epoch 06 | train‑loss 0.3031 | val‑MAE 0.6506
+epoch 07 | train‑loss 0.3023 | val‑MAE 0.6530
+epoch 08 | train‑loss 0.3016 | val‑MAE 0.6601
+epoch 09 | train‑loss 0.3015 | val‑MAE 0.6509
+epoch 10 | train‑loss 0.3022 | val‑MAE 0.6664
+epoch 11 | train‑loss 0.3014 | val‑MAE 0.6496
+epoch 12 | train‑loss 0.3021 | val‑MAE 0.6545
+epoch 13 | train‑loss 0.3019 | val‑MAE 0.6545
+epoch 14 | train‑loss 0.3015 | val‑MAE 0.6560
+TEST‑MAE 0.6553517712402344
+
+
+New model: mask all connections other than 16 pairs to their pieces.
+nn.Linear(16, 32), nn.ReLU(),
+nn.Linear(32, 1) thereafter.
+
+epoch 00 | train‑loss 12.8993 | val‑MAE 13.0502
+epoch 01 | train‑loss 12.1245 | val‑MAE 12.1256
+epoch 02 | train‑loss 10.8571 | val‑MAE 10.3259
+epoch 03 | train‑loss 7.4316 | val‑MAE 3.6023
+epoch 04 | train‑loss 0.7165 | val‑MAE 0.8866
+epoch 05 | train‑loss 0.4850 | val‑MAE 0.8855
+epoch 06 | train‑loss 0.4827 | val‑MAE 0.8849
+epoch 07 | train‑loss 0.4811 | val‑MAE 0.8843
+Test mae: 0.8815011547851562
+
+Masked model with instead two 16x16 linears after the masked pairs layer.
+epoch 00 | train‑loss 13.0101 | val‑MAE 13.2565
+epoch 01 | train‑loss 12.4659 | val‑MAE 12.6424
+epoch 02 | train‑loss 11.7053 | val‑MAE 11.6655
+epoch 03 | train‑loss 10.2146 | val‑MAE 9.3166
+epoch 04 | train‑loss 4.6897 | val‑MAE 0.8854
+epoch 05 | train‑loss 0.4817 | val‑MAE 0.8846
+epoch 06 | train‑loss 0.4804 | val‑MAE 0.8844
+epoch 07 | train‑loss 0.4795 | val‑MAE 0.8841
+epoch 08 | train‑loss 0.4789 | val‑MAE 0.8849
+epoch 09 | train‑loss 0.4784 | val‑MAE 0.8839
+epoch 10 | train‑loss 0.4780 | val‑MAE 0.8849
+epoch 11 | train‑loss 0.4778 | val‑MAE 0.8839
+epoch 12 | train‑loss 0.4776 | val‑MAE 0.8832
+epoch 13 | train‑loss 0.4774 | val‑MAE 0.8836
+epoch 14 | train‑loss 0.4773 | val‑MAE 0.8840
+Test mae: 0.88219642578125
