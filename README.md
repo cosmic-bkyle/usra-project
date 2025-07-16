@@ -15,8 +15,8 @@ This is a research‑oriented codebase exploring machine learning techniques to 
 ## Research Journal
 See **[journal.pdf](./journal.pdf)** for full notes
 
-| Date           | Highlights                                                                     |
+| Date           | Description                                                                     |
 | -------------- | -------------------------------------------------------------------------------|
 | 2025‑05‑20 | Clarified high-level goals & HTR subset stats task                                 |
 | 2025‑05‑27 | Designed graph‑based blockiness feature                                            |
-| 2025‑06‑03 | Implemented OOP cube, generated 100k DR dataset, fitted Lasso                      |
+| 2025‑06‑03 | Implemented OOP cube, generated  dataset, fitted Lasso                      |
