@@ -129,6 +129,7 @@ Ls = { # corner, edge 1, edge2
     "bottom": [(4, 9, 8), (5, 10, 9), (6, 11, 10), (7, 8, 11)]
 }
 LINES = [(0, 1, 1), (1, 2, 2), (2, 3, 3), (3, 0, 0), (5, 4, 9), (6, 5, 10), (7, 6, 11), (4, 7, 8)]# format (corner1, corner2, edge)
+#don't change the tuple order of the second half of LINES it respects rotational symmetries of cube turns
 
   
 def inverse_corner(move):
@@ -359,6 +360,7 @@ def main():
     
 
 if __name__ == "__main__":
+    
     main()
 
 
